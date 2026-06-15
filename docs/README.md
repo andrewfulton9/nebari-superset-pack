@@ -43,31 +43,6 @@ npm run serve
 
 Serves the contents of `docs/build/` locally so you can verify the production output, including search.
 
-## Troubleshooting
-
-### `ValidationError: Invalid options object. Progress Plugin has been initialized using an options object that does not match the API schema`
-
-This is a webpack-version mismatch. Docusaurus 3.5.2 targets webpack 5.94; webpack 5.97+ tightens the `ProgressPlugin` options schema and rejects what Docusaurus passes. `package.json` pins the version with:
-
-```json
-"overrides": {
-  "webpack": "5.94.0"
-}
-```
-
-If `node_modules` was populated before the field existed, reinstall cleanly:
-
-```bash
-cd docs
-rm -rf node_modules package-lock.json
-npm install
-npm run build
-```
-
 ## Deployment
 
 The site deploys automatically via GitHub Pages whenever changes land on the `main` branch. The GitHub Actions workflow runs `npm run build` inside `docs/` and publishes the contents of `docs/build/` to the `gh-pages` branch.
-
-No manual deploy step is required. To trigger a rebuild without a code change, re-run the Pages workflow from the Actions tab.
-
-To point the site at a custom domain, update `url` in [`docusaurus.config.ts`](./docusaurus.config.ts) and add a `CNAME` file to `docs/static/`. The current default is `https://nebari-dev.github.io/nebari-superset-pack`.
