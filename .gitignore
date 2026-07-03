@@ -2,10 +2,10 @@
 chart/charts/
 chart/Chart.lock
 
-# Docs (Docusaurus)
+# Docs (Astro)
 docs/node_modules/
-docs/build/
-docs/.docusaurus/
+*dist/
+docs/.astro/
 docs/.cache-loader/
 
 # Local agent / contributor playbook (not for the public repo)
@@ -14,6 +14,8 @@ AGENTS.md
 
 # Misc
 .DS_Store
+.env
+.env.production
 .env.local
 .env.development.local
 .env.test.local

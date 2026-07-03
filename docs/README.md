@@ -1,31 +1,25 @@
 # Nebari Superset Pack Documentation
 
-This directory contains the [Docusaurus 3.5.2](https://docusaurus.io/) site for the Nebari Superset pack.
-
-> **Note:** The site is currently an empty scaffold with a placeholder landing page. Section content will be added in follow-on work.
+This directory contains the [Astro](https://astro.build) + [Starlight](https://starlight.astro.build) site for the Nebari Superset Pack.
 
 ## Prerequisites
 
-- Node.js `>= 20` (enforced by the `engines` field in `package.json`).
-
-The site is built and tested against Node 20.
+- Node.js `>= 22` (enforced by the `engines` field in `package.json`)
+- npm (bundled with Node.js)
 
 ## Install
 
 ```bash
-cd docs
-npm install
+npm ci
 ```
 
 ## Local development
 
 ```bash
-npm start
+npm run dev
 ```
 
-Starts the Docusaurus dev server with hot reload on http://localhost:3000/.
-
-Note: the lunr search index is generated only by `npm run build`. The search box in the dev server will return no results; use a production build to exercise search.
+Starts the Astro dev server with hot reload on http://localhost:4321/.
 
 ## Production build
 
@@ -33,16 +27,41 @@ Note: the lunr search index is generated only by `npm run build`. The search box
 npm run build
 ```
 
-Emits static files to `docs/build/`. The build step also produces the lunr search index via `docusaurus-lunr-search`.
+Emits static files to `docs/dist/`.
 
 ## Preview the production build
 
 ```bash
-npm run serve
+npm run preview
 ```
 
-Serves the contents of `docs/build/` locally so you can verify the production output, including search.
+## Unit tests
 
-## Deployment
+```bash
+npm test
+```
 
-The site deploys automatically via GitHub Pages whenever changes land on the `main` branch. The GitHub Actions workflow runs `npm run build` inside `docs/` and publishes the contents of `docs/build/` to the `gh-pages` branch.
+## Link checking
+
+```bash
+bash ../scripts/check-links.sh
+```
+
+To test with the production base path: `BASE=/superset-pack/ bash ../scripts/check-links.sh`
+
+## Content
+
+Pages live in `src/content/docs/`. Each `.md` or `.mdx` file becomes a page. The sidebar is configured in `astro.config.mjs` under `starlight.sidebar`.
+
+## Updating nebari design tokens
+
+`src/styles/nebari-tokens.css` is copied from the [nebari-design](https://github.com/nebari-dev/nebari-design) repository. To update the primitive color ramps, fetch the latest from the reference pack:
+
+```bash
+gh api "repos/nebari-dev/llm-serving-pack/contents/docs/src/styles/nebari-tokens.css?ref=main" \
+  --jq '.content' | base64 -d > src/styles/nebari-tokens.css
+```
+
+## CI
+
+The [`docs` workflow](../.github/workflows/docs.yml) builds the site and deploys to [Cloudflare Pages](https://pages.cloudflare.com) on every push to `main`. Pull requests get a preview URL posted as a comment.
